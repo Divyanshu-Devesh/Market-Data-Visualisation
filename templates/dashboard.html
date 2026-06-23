@@ -3,165 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Marketing Intelligence Control Panel Suite</title>
-    <script src="https://tailwindcss.com"></script>
+    <title>AI Marketing Intelligence Enterprise Suite</title>
     <script src="https://plot.ly"></script>
     <style>
-        .glass {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+        body {
+            background: linear-gradient(135deg, #090d16, #111827, #0f172a);
+            color: #f1f5f9; font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0;
         }
+        header {
+            background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px);
+            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        h1 { margin: 0; font-size: 22px; color: #818cf8; font-weight: 800; }
+        .export-btn {
+            background: #4f46e5; color: white; padding: 10px 18px; border-radius: 8px;
+            text-decoration: none; font-size: 12px; font-weight: bold; transition: 0.2s;
+        }
+        .export-btn:hover { background: #4338ca; }
+        main { max-w: 1400px; margin: 30px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 20px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .kpi-val { font-size: 28px; font-weight: 800; margin: 8px 0 2px 0; color: #ffffff; }
+        .kpi-lbl { font-size: 11px; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; margin: 0; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 25px; }
+        .chart-box { height: 340px; margin-top: 15px; }
+        .dropzone {
+            border: 2px dashed rgba(255,255,255,0.1); border-radius: 10px; padding: 30px;
+            text-align: center; cursor: pointer; color: #a5b4fc; transition: 0.2s;
+        }
+        .dropzone:hover { border-color: #6366f1; background: rgba(99,102,241,0.02); }
     </style>
 </head>
-<body class="bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 font-sans text-slate-100 min-h-screen antialiased">
+<body>
 
-    <header class="glass sticky top-0 z-50 px-8 py-4 flex justify-between items-center shadow-2xl border-b border-white/10">
+    <header>
         <div>
-            <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">AI Marketing Visual Storytelling Control Engine</h1>
-            <p class="text-xs text-slate-400 font-mono">Ecosystem Matrix Hub // Ver 3.2</p>
+            <h1>AI Marketing Visual Storytelling & KPI Control Suite</h1>
+            <div style="font-size:11px; color:#64748b; font-family:monospace; margin-top:3px;">Data Lake Warehouse Connection Stack Active</div>
         </div>
-        <div class="flex items-center space-x-4">
-            <a href="/export/csv" class="px-4 py-2 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 transition-all border border-white/20 tracking-wider">
-                ↓ EXPORT DATA LEDGER (.CSV)
-            </a>
-            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 animate-pulse">
-                System Live
-            </span>
-        </div>
+        <a href="/export/csv" class="export-btn">↓ EXPORT DATA LEDGER (.CSV)</a>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-
-        <!-- Ingestion Hub Area -->
-        <section class="glass rounded-2xl p-6 transition-all shadow-xl">
-            <h3 class="text-base font-bold text-white mb-2">Telemetry Data Ingestion & Migration Slot</h3>
-            <p class="text-xs text-slate-400 mb-4">Drag and drop your marketing logs spreadsheet (.csv) here to parse analytics models, plot multi-dimensional arrays, and compile real-time anomalies instantly.</p>
-            <div id="dropZone" class="border-2 border-dashed border-white/20 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-500/5 transition-all">
-                <p class="text-sm font-medium text-slate-300">Click to browse or drop metrics file here</p>
-                <input type="file" id="fileInput" accept=".csv" class="hidden">
+    <main>
+        <!-- Ingestion Migration Node -->
+        <section class="card">
+            <h4 style="margin:0 0 8px 0; font-size:14px;">Automated Telemetry Migration Slot</h4>
+            <div id="dropZone" class="dropzone">
+                <p style="margin:0; font-size:13px;">Drag & Drop continuous performance campaign logs spreadsheet (.csv) here to recompile visuals</p>
+                <input type="file" id="fileInput" accept=".csv" style="display:none;">
             </div>
         </section>
 
-        <!-- Executive KPI Framework Metric Stream (Flattened Conditions) -->
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="glass rounded-xl p-5 shadow-lg">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calculated Cost Footprint</p>
-                <h3 class="text-3xl font-extrabold text-white mt-1">${{ summary.total_cost }}</h3>
-                <span class="text-[11px] text-indigo-400 font-mono mt-2 block">🔮 Horizon Trend: ${{ summary.next_horizon_cost }}</span>
+        <!-- KPI Executive Metrics Row -->
+        <section class="kpi-grid">
+            <div class="card">
+                <p class="kpi-lbl">Total Campaign Spend</p>
+                <div class="kpi-val" style="color:#f43f5e;">${{ summary.total_spend }}</div>
             </div>
-            <div class="glass rounded-xl p-5 shadow-lg">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mean Conversion Scale</p>
-                <h3 class="text-3xl font-extrabold text-emerald-400 mt-1">{{ summary.avg_conversion }}%</h3>
-                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Multichannel thread velocity</span>
+            <div class="card">
+                <p class="kpi-lbl">Generated Revenue Pipeline</p>
+                <div class="kpi-val" style="color:#10b981;">${{ summary.total_revenue }}</div>
             </div>
-            <div class="glass rounded-xl p-5 shadow-lg">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detected Telemetry Anomalies</p>
-                <h3 class="text-3xl font-extrabold text-slate-300 mt-1">{{ summary.anomalies }}</h3>
-                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Cost threshold deviations</span>
+            <div class="card">
+                <p class="kpi-lbl">Blended ROAS Scale</p>
+                <div class="kpi-val" style="color:#6366f1;">{{ summary.blended_roas }}x</div>
             </div>
-            <div class="glass rounded-xl p-5 shadow-lg">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Loaded Records Ledger</p>
-                <h3 class="text-3xl font-extrabold text-indigo-400 mt-1">{{ summary.total_conversations }}</h3>
-                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Active structural telemetry paths</span>
+            <div class="card">
+                <p class="kpi-lbl">Blended CPA Metric</p>
+                <div class="kpi-val" style="color:#f59e0b;">${{ summary.blended_cpa }}</div>
             </div>
-        </section>
-
-        <!-- Plotly Deck -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="glass rounded-2xl p-6 shadow-xl">
-                <h3 class="text-sm font-bold text-white mb-3 tracking-wide">Optimization Density Matrix Heatmap</h3>
-                <div id="plotlyHeatmap" class="w-full h-72 rounded-lg overflow-hidden"></div>
-            </div>
-            <div class="glass rounded-2xl p-6 shadow-xl">
-                <h3 class="text-sm font-bold text-white mb-3 tracking-wide">Geographical Telemetry Footprint Map</h3>
-                <div id="plotlyGeoMap" class="w-full h-72 rounded-lg overflow-hidden"></div>
+            <div class="card">
+                <p class="kpi-lbl">AI Gateway Cost Overheads</p>
+                <div class="kpi-val" style="font-size:22px; margin-top:14px;">${{ summary.total_infra_cost }}</div>
             </div>
         </section>
 
-        <!-- Sandbox -->
-        <section class="glass rounded-2xl p-6 shadow-xl">
-            <h3 class="text-base font-bold text-white mb-1">Conversational AI Engine Sandbox</h3>
-            <p class="text-xs text-slate-400 mb-4">Run compliance checks, construct narrative scripts, or filter relational entities.</p>
-            <div class="space-y-4">
-                <input type="text" id="sandboxPrompt" placeholder="Ask anything about current visual arrays..." class="w-full bg-slate-950/60 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-emerald-400 focus:outline-none focus:border-indigo-500">
-                <div class="bg-slate-950 rounded-xl p-4 font-mono text-xs min-h-[50px] text-indigo-400" id="sandboxTerminal">System operational standby loop. Ready for payload instructions.</div>
+        <!-- Charts Dashboard Matrix Grid -->
+        <section class="chart-grid">
+            <!-- 1 & 4. Revenue By Platform & ROAS Comparison -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#c084fc;">1 & 4. Revenue Generation vs ROAS Allocation by Platform</h4>
+                <div id="plotPlatformRevenue" class="chart-box"></div>
+            </div>
+            <!-- 2. Ad Spend Trend over Time -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#38bdf8;">2. Continuous Media Ad Spend Trend Streams</h4>
+                <div id="plotAdSpendTrend" class="chart-box"></div>
+            </div>
+            <!-- 3 & 5. Conversion Performance vs CPA Analysis -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#34d399;">3 & 5. Conversion Acquisition Performance vs CPA Allocation</h4>
+                <div id="plotConversionCPA" class="chart-box"></div>
+            </div>
+            <!-- 6. Marketing Funnel Stage Overview -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#fb7185;">6. Structural Marketing Conversion Funnel Drops Overview</h4>
+                <div id="plotFunnelStage" class="chart-box"></div>
+            </div>
+            <!-- 7. User Sentiment Profile Analysis -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#fbcfe8;">7. Ingested Intent User Sentiment Profiles Analysis</h4>
+                <div id="plotUserSentiment" class="chart-box"></div>
+            </div>
+            <!-- 8. Intent Topic Distribution Breakdown -->
+            <div class="card">
+                <h4 style="margin:0; font-size:13px; color:#fde047;">8. Conversational Intent Classification Topic Distribution</h4>
+                <div id="plotIntentTopics" class="chart-box"></div>
+            </div>
+            <!-- 9. Financial Cost Breakdown by Intent -->
+            <div class="card" style="grid-column: span 2;">
+                <h4 style="margin:0; font-size:13px; color:#818cf8;">9. Infrastructure Pipeline Cost Overhead Breakdown by Conversational Intent</h4>
+                <div id="plotIntentCosts" class="chart-box" style="height:380px;"></div>
             </div>
         </section>
-
     </main>
 
-    <!-- Passing data securely through a hidden data layer to prevent script tagging syntax crashes -->
-    <div id="backend-payload" data-records='{{ data | tojson | safe }}' class="hidden"></div>
+    <div id="payload" data-records='{{ data | tojson | safe }}' style="display:none;"></div>
 
     <script>
-        // Read data safely directly from the DOM attribute string
-        const payloadElement = document.getElementById('backend-payload');
-        const rawPool = JSON.parse(payloadElement.getAttribute('data-records') || '[]');
+        const rawData = JSON.parse(document.getElementById('payload').getAttribute('data-records') || '[]');
+        
+        // Data Aggregation Helper Functions
+        const groupbySum = (arr, key, targetKey) => {
+            return Object.values(arr.reduce((acc, obj) => {
+                acc[obj[key]] = acc[obj[key]] || { [key]: obj[key], [targetKey]: 0, count: 0 };
+                acc[obj[key]][targetKey] += obj[targetKey];
+                acc[obj[key]].count++;
+                return acc;
+            }, {}));
+        };
 
-        // --- 1. PLOTLY HEATMAP ---
-        const matrixX = rawPool.map(item => item.timestamp ? item.timestamp.split(' ')[1] : '00:00');
-        const matrixY = ['Conversion %', 'Prompt Cost ($)', 'Completion Cost ($)'];
-        const zValues = [
-            rawPool.map(item => item.conversion_rate || 0),
-            rawPool.map(item => item.prompt_cost || 0),
-            rawPool.map(item => item.completion_cost || 0)
-        ];
-
-        const heatmapLayout = {
+        const globalChartTheme = {
             paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
-            margin: {t:10, b:40, l:90, r:10}, font: {color: '#94a3b8', size: 10},
-            xaxis: {gridcolor: 'rgba(255,255,255,0.05)'}, yaxis: {gridcolor: 'rgba(255,255,255,0.05)'}
+            font: { color: '#94a3b8', size: 10 }, margin: { t: 30, b: 40, l: 50, r: 30 },
+            xaxis: { gridcolor: 'rgba(255,255,255,0.03)', zeroline: false },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.03)', zeroline: false }
         };
-        Plotly.newPlot('plotlyHeatmap', [{
-            z: zValues, x: matrixX, y: matrixY, type: 'heatmap', colorscale: 'Viridis'
-        }], heatmapLayout, {responsive: true, displayModeBar: false});
 
-        // --- 2. PLOTLY GEOGRAPHICAL MAP ---
-        const lats = rawPool.map(item => item.region_lat || 37.0902);
-        const lons = rawPool.map(item => item.region_lon || -95.7129);
-        const markerSizes = rawPool.map(item => (item.conversion_rate || 1) * 4);
+        // 1 & 4: Revenue & ROAS by Platform Group
+        const platformData = groupbySum(rawData, 'platform', 'revenue_generated');
+        const platforms = platformData.map(d => d.platform);
+        const revenues = platformData.map(d => d.revenue_generated);
+        const avgRoas = platforms.map(p => {
+            const matches = rawData.filter(d => d.platform === p);
+            return matches.reduce((acc, curr) => acc + curr.roas, 0) / matches.length;
+        });
 
-        const geoLayout = {
-            geo: {
-                scope: 'usa', projection: {type: 'albers usa'},
-                showland: true, landcolor: '#0f172a', subunitcolor: '#334155', countrycolor: '#1e293b',
-                bgcolor: 'rgba(0,0,0,0)'
-            },
-            margin: {t:0, b:0, l:0, r:0}, paper_bgcolor: 'rgba(0,0,0,0)'
-        };
-        Plotly.newPlot('plotlyGeoMap', [{
-            type: 'scattergeo', lat: lats, lon: lons, mode: 'markers',
-            marker: {size: markerSizes, color: 'rgb(129, 140, 248)', opacity: 0.8, line: {width: 1, color: '#ffffff'}}
-        }], geoLayout, {responsive: true, displayModeBar: false});
+        Plotly.newPlot('plotPlatformRevenue', [
+            { x: platforms, y: revenues, type: 'bar', name: 'Revenue ($)', marker: { color: '#a855f7' } },
+            { x: platforms, y: avgRoas, type: 'scatter', yaxis: 'y2', name: 'Avg ROAS (x)', marker: { color: '#6366f1' } }
+        ], {
+            ...globalChartTheme,
+            yaxis2: { overlaying: 'y', side: 'right', gridcolor: 'rgba(0,0,0,0)', font: { color: '#6366f1' } }
+        }, { displayModeBar: false });
 
-        // --- 3. DROPZONE HANDLERS ---
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
+        // 2: Ad Spend Trend Streams
+        const sortedLogs = [...rawData].sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+        Plotly.newPlot('plotAdSpendTrend', [{
+            x: sortedLogs.map(d => d.timestamp), y: sortedLogs.map(d => d.ad_spend),
+            type: 'scatter', mode: 'lines+markers', line: { color: '#0ea5e9', shape: 'spline' },
+            fill: 'tozeroy', fillcolor: 'rgba(14,165,233,0.05)'
+        }], globalChartTheme, { displayModeBar: false });
 
-        dropZone.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => uploadDataPayload(e.target.files[0]);
+        // 3 & 5: Conversions vs CPA
+        const platformConvs = groupbySum(rawData, 'platform', 'conversions');
+        const cpaMap = platformConvs.map(p => {
+            const matches = rawData.filter(d => d.platform === p.platform);
+            return matches.reduce((acc, curr) => acc + curr.cpa, 0) / matches.length;
+        });
 
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400'); };
-        dropZone.ondragleave = () => dropZone.classList.remove('border-indigo-400');
-        dropZone.ondrop = (e) => { e.preventDefault(); uploadDataPayload(e.dataTransfer.files[0]); };
+        Plotly.newPlot('plotConversionCPA', [
+            { x: platformConvs.map(d => d.platform), y: platformConvs.map(d => d.conversions), type: 'bar', name: 'Conversions', marker: { color: '#10b981' } },
+            { x: platformConvs.map(d => d.platform), y: cpaMap, type: 'scatter', mode: 'markers+lines', yaxis: 'y2', name: 'Mean CPA ($)', marker: { color: '#f59e0b', size: 8 } }
+        ], {
+            ...globalChartTheme, yaxis2: { overlaying: 'y', side: 'right', gridcolor: 'rgba(0,0,0,0)' }
+        }, { displayModeBar: false });
 
-        async function uploadDataPayload(file) {
-            if (!file) return;
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            dropZone.innerText = "Syncing pipelines...";
-            const response = await fetch('/upload-telemetry', { method: 'POST', body: formData });
-            if (response.ok) {
-                alert("Data Lake Transformed! Reloading workspace...");
-                window.location.reload();
-            } else {
-                alert("Parsing fault in uploaded file.");
-                window.location.reload();
-            }
-        }
-    </script>
-</body>
-</html>
+        // 6: Funnel Stage Volume Allocation
+        const funnelOrder = ["Impression", "Click-Through", "Lead Generation", "Cart Addition", "Conversion Checkout"];
