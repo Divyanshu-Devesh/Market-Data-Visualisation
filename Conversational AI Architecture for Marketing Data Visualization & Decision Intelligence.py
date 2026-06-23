@@ -115,12 +115,12 @@ export default function ConversationalAIMarketingArchitecture() {
               Core AI Workflow
             </h3>
             <ul className="space-y-3 text-gray-700">
-              <li>• User asks marketing-related question</li>
-              <li>• NLP engine interprets business intent</li>
-              <li>• AI queries integrated marketing datasets</li>
-              <li>• Predictive models analyze patterns</li>
-              <li>• Visualization engine generates insights</li>
-              <li>• Conversational AI explains findings</li>
+              <li> User asks marketing-related question</li>
+              <li> NLP engine interprets business intent</li>
+              <li> AI queries integrated marketing datasets</li>
+              <li> Predictive models analyze patterns</li>
+              <li> Visualization engine generates insights</li>
+              <li> Conversational AI explains findings</li>
             </ul>
           </div>
 
@@ -129,12 +129,12 @@ export default function ConversationalAIMarketingArchitecture() {
               Marketing Intelligence Features
             </h3>
             <ul className="space-y-3 text-gray-700">
-              <li>• Campaign performance prediction</li>
-              <li>• Customer churn forecasting</li>
-              <li>• Audience segmentation analysis</li>
-              <li>• Real-time anomaly detection</li>
-              <li>• Cross-channel attribution modeling</li>
-              <li>• ROI optimization recommendations</li>
+              <li> Campaign performance prediction</li>
+              <li> Customer churn forecasting</li>
+              <li> Audience segmentation analysis</li>
+              <li> Real-time anomaly detection</li>
+              <li> Cross-channel attribution modeling</li>
+              <li> ROI optimization recommendations</li>
             </ul>
           </div>
 
@@ -143,12 +143,12 @@ export default function ConversationalAIMarketingArchitecture() {
               Recommended Technology Stack
             </h3>
             <ul className="space-y-3 text-gray-700">
-              <li>• Frontend: React + Next.js</li>
-              <li>• AI: OpenAI / LangChain</li>
-              <li>• Database: PostgreSQL + Pinecone</li>
-              <li>• Visualization: D3.js + Recharts</li>
-              <li>• Cloud: AWS / Azure / GCP</li>
-              <li>• Streaming: Apache Kafka</li>
+              <li> Frontend: React + Next.js</li>
+              <li> AI: OpenAI / LangChain</li>
+              <li> Database: PostgreSQL + Pinecone</li>
+              <li> Visualization: D3.js + Recharts</li>
+              <li> Cloud: AWS / Azure / GCP</li>
+              <li> Streaming: Apache Kafka</li>
             </ul>
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function ConversationalAIMarketingArchitecture() {
             <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
               <h3 className="font-bold text-lg mb-3">1. User Query</h3>
               <p className="text-sm text-gray-300">
-                “Why did our Meta Ads conversion rate drop in Q2?”
+                "Why did our Meta Ads conversion rate drop in Q2?"
               </p>
             </div>
 
