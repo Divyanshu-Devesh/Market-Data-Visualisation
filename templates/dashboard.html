@@ -103,15 +103,15 @@
     <!-- Visual Generation Engine Scripts Integration -->
     <script>
         // Extract multi-dimensional dataset array passed securely from Jinja runtime engine
-        const rawPool = {{ data | tojson if data else '[]' }};
+        const analyticsData = {{ data | tojson }};
 
         // --- 1. RENDER PLOTLY PERFORMANCE HEATMAP MATRIX ---
-        const matrixX = rawPool.map(item => item.timestamp ? item.timestamp.split(' ')[1] : '00:00');
+        const matrixX = analyticsData.map(item => item.timestamp ? item.timestamp.split(' ')[1] : '00:00');
         const matrixY = ['Conversion %', 'Prompt Cost ($)', 'Completion Cost ($)'];
         const zValues = [
-            rawPool.map(item => item.conversion_rate || 0),
-            rawPool.map(item => item.prompt_cost || 0),
-            rawPool.map(item => item.completion_cost || 0)
+            analyticsData.map(item => item.conversion_rate || 0),
+            analyticsData.map(item => item.prompt_cost || 0),
+            analyticsData.map(item => item.completion_cost || 0)
         ];
 
         const heatmapLayout = {
