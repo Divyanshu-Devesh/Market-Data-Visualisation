@@ -62,7 +62,7 @@
             <div class="glass rounded-xl p-5 shadow-lg">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detected Telemetry Anomalies</p>
                 <h3 class="text-3xl font-extrabold {% if summary.anomalies > 0 %}text-rose-400{% else %}text-slate-300{% endif %} mt-1">
-                    {{ summary.anomalies }}
+                    {% if summary.anomalies is defined and summary.anomalies > 0 %}
                 </h3>
                 <span class="text-[11px] text-slate-400 font-mono mt-2 block">Cost threshold deviations</span>
             </div>
