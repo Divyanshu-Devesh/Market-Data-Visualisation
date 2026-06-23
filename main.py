@@ -66,11 +66,14 @@ async def serve_actionable_dashboard(request: Request):
         "total_cost": round(calculated_cost, 4)
     }
 
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "summary": executive_summary,
-        "data": data_records
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={
+            "summary": executive_summary,
+            "data": data_records
+        }
+    )
 
 @app.post("/query")
 async def dispatch_conversational_query(payload: QueryPayload):
