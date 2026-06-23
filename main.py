@@ -1,3 +1,12 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+import os
+
+# Create the FastAPI app instance that Render is looking for
+app = FastAPI()
+
 import json
 import numpy as np
 import pandas as pd
@@ -163,3 +172,14 @@ if __name__ == "__main__":
     render_llm_analytics_dashboard(transformed_analytics, executive_summary)
     
     print("--- Conversational Pipeline Successfully Finalized ---")
+
+# No Indentation for the route below:
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    # This runs your existing pipeline when someone loads the page
+    raw_logs =fetch_llm_conversational_logs()
+    df = transform_conversational_data(raw_logs)
+
+    # Simple placeholder response for testing
+    return f"<h1>Dashboard Data Processed Successfully!</h1><p>Total Records: {len(df)}</p>"
