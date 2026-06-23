@@ -1,50 +1,172 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>AI Marketing Intelligence Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Marketing Intelligence Control Panel Suite</title>
+    <script src="https://tailwindcss.com"></script>
+    <!-- Include Plotly JS framework for high-fidelity chart interactivity -->
+    <script src="https://plot.ly"></script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+    </style>
 </head>
-<body style="background:#000000; margin:0; padding:0;">
+<body class="bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 font-sans text-slate-100 min-h-screen antialiased">
 
-    <div style="text-align:center; padding:40px; color:white; font-family:Arial;">
-        <h1 style="font-size:50px; color:#00FFAA;">
-            Conversational AI Marketing Intelligence Ecosystem
-        </h1>
+    <!-- Top Architecture Navigation -->
+    <header class="glass sticky top-0 z-50 px-8 py-4 flex justify-between items-center shadow-2xl border-b border-white/10">
+        <div>
+            <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">AI Marketing Visual Storytelling Control Engine</h1>
+            <p class="text-xs text-slate-400 font-mono">Ecosystem Matrix Hub // Ver 3.2</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="/export/csv" class="px-4 py-2 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 transition-all border border-white/20 tracking-wider">
+                ↓ EXPORT DATA LEDGER (.CSV)
+            </a>
+            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 animate-pulse">
+                System Live
+            </span>
+        </div>
+    </header>
 
-        <p style="font-size:22px; color:#CCCCCC; max-width:1200px; margin:auto;">
-            Unified ETL pipelines integrating disparate marketing data stacks into a centralized AI-powered analytics ecosystem with automated visualization and executive intelligence.
-        </p>
-    </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    
-<div style="padding:30px; background:#111111; color:white; font-family:Arial; border-radius:20px; margin:20px;">
-    <h1 style="color:#00FFAA;">Executive AI Insights</h1>
+        <!-- Ingestion Hub & Migration Slot Area -->
+        <section class="glass rounded-2xl p-6 transition-all shadow-xl">
+            <h3 class="text-base font-bold text-white mb-2">Telemetry Data Ingestion & Migration Slot</h3>
+            <p class="text-xs text-slate-400 mb-4">Drag and drop your marketing logs spreadsheet (.csv) here to parse analytics models, plot multi-dimensional arrays, and compile real-time anomalies instantly.</p>
+            
+            <div id="dropZone" class="border-2 border-dashed border-white/20 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-500/5 transition-all">
+                <p class="text-sm font-medium text-slate-300">Click to browse or drop metrics file here</p>
+                <input type="file" id="fileInput" accept=".csv" class="hidden">
+            </div>
+        </section>
 
-    <h2>Key Marketing Intelligence Findings</h2>
+        <!-- Executive KPI Framework Metric Stream -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="glass rounded-xl p-5 shadow-lg">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calculated Cost Footprint</p>
+                <h3 class="text-3xl font-extrabold text-white mt-1">${{ summary.total_cost }}</h3>
+                <span class="text-[11px] text-indigo-400 font-mono mt-2 block">🔮 Horizon Trend: ${{ summary.next_horizon_cost }}</span>
+            </div>
+            <div class="glass rounded-xl p-5 shadow-lg">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mean Conversion Scale</p>
+                <h3 class="text-3xl font-extrabold text-emerald-400 mt-1">{{ summary.avg_conversion }}%</h3>
+                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Multichannel thread velocity</span>
+            </div>
+            <div class="glass rounded-xl p-5 shadow-lg">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detected Telemetry Anomalies</p>
+                <h3 class="text-3xl font-extrabold {% if summary.anomalies > 0 %}text-rose-400{% else %}text-slate-300{% endif %} mt-1">
+                    {{ summary.anomalies }}
+                </h3>
+                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Cost threshold deviations</span>
+            </div>
+            <div class="glass rounded-xl p-5 shadow-lg">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Loaded Records Ledger</p>
+                <h3 class="text-3xl font-extrabold text-indigo-400 mt-1">{{ summary.total_conversations }}</h3>
+                <span class="text-[11px] text-slate-400 font-mono mt-2 block">Active structural telemetry paths</span>
+            </div>
+        </section>
 
-    <ul style="font-size:18px; line-height:2;">
-        <li><b>Highest Performing Platform:</b> Google Ads</li>
-        <li><b>Highest Revenue Contributor:</b> Google Ads</li>
-        <li><b>Total Marketing Channels Integrated:</b> 3</li>
-        <li><b>Unified ETL Pipeline Status:</b> Operational</li>
-        <li><b>Dashboard Type:</b> Real-Time AI Visualization</li>
-    </ul>
+        <!-- Plotly High-Interactivity Matrix Deck -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Plotly Interactive Heatmap Card -->
+            <div class="glass rounded-2xl p-6 shadow-xl">
+                <h3 class="text-sm font-bold text-white mb-3 tracking-wide">Optimization Density Matrix Heatmap</h3>
+                <div id="plotlyHeatmap" class="w-full h-72 rounded-lg overflow-hidden"></div>
+            </div>
 
-    <h2>AI Recommendations</h2>
+            <!-- Plotly Geographical Target Scatter Plot -->
+            <div class="glass rounded-2xl p-6 shadow-xl">
+                <h3 class="text-sm font-bold text-white mb-3 tracking-wide">Geographical Telemetry Footprint Map</h3>
+                <div id="plotlyGeoMap" class="w-full h-72 rounded-lg overflow-hidden"></div>
+            </div>
+        </section>
 
-    <ul style="font-size:18px; line-height:2;">
-        <li>Increase budget allocation toward highest ROAS campaigns.</li>
-        <li>Optimize low-performing acquisition channels.</li>
-        <li>Deploy predictive audience targeting models.</li>
-        <li>Automate campaign anomaly detection.</li>
-        <li>Enable conversational AI reporting for executives.</li>
-    </ul>
-</div>
+        <!-- Interactive Sandbox Execution Interface -->
+        <section class="glass rounded-2xl p-6 shadow-xl">
+            <h3 class="text-base font-bold text-white mb-1">Conversational AI Engine Sandbox</h3>
+            <p class="text-xs text-slate-400 mb-4">Run compliance checks, construct narrative scripts, or filter relational entities.</p>
+            <div class="space-y-4">
+                <input type="text" id="sandboxPrompt" placeholder="Ask anything about current visual arrays..." class="w-full bg-slate-950/60 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-emerald-400 focus:outline-none focus:border-indigo-500">
+                <div class="bg-slate-950 rounded-xl p-4 font-mono text-xs min-h-[50px] text-indigo-400" id="sandboxTerminal">System operational standby loop. Ready for payload instructions.</div>
+            </div>
+        </section>
 
+    </main>
 
-    <div style="padding:20px;">
-        <div style="height:1400px; width:1600px;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.6.0.min.js" integrity="sha256-QaOVwtVY0T02VaHrr6pnoHLCwayMJp4O5n4YyaE3rJk=" crossorigin="anonymous"></script>                <div id="550e6c5c-5e89-45d9-a039-26ea4fc7ac12" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("550e6c5c-5e89-45d9-a039-26ea4fc7ac12")) {                    Plotly.newPlot(                        "550e6c5c-5e89-45d9-a039-26ea4fc7ac12",                        [{"name":"Revenue","x":["Google Ads","LinkedIn Ads","Meta Ads"],"y":{"dtype":"i4","bdata":"N9IFABilAwDK3AMA"},"type":"bar","xaxis":"x","yaxis":"y"},{"mode":"lines+markers","name":"Meta Ads","x":["2026-01-01T00:00:00.000000","2026-01-02T00:00:00.000000","2026-01-03T00:00:00.000000","2026-01-04T00:00:00.000000","2026-01-05T00:00:00.000000","2026-01-06T00:00:00.000000","2026-01-07T00:00:00.000000","2026-01-08T00:00:00.000000","2026-01-09T00:00:00.000000","2026-01-10T00:00:00.000000","2026-01-11T00:00:00.000000","2026-01-12T00:00:00.000000","2026-01-13T00:00:00.000000","2026-01-14T00:00:00.000000","2026-01-15T00:00:00.000000","2026-01-16T00:00:00.000000","2026-01-17T00:00:00.000000","2026-01-18T00:00:00.000000","2026-01-19T00:00:00.000000","2026-01-20T00:00:00.000000","2026-01-21T00:00:00.000000","2026-01-22T00:00:00.000000","2026-01-23T00:00:00.000000","2026-01-24T00:00:00.000000","2026-01-25T00:00:00.000000","2026-01-26T00:00:00.000000","2026-01-27T00:00:00.000000","2026-01-28T00:00:00.000000","2026-01-29T00:00:00.000000","2026-01-30T00:00:00.000000"],"y":{"dtype":"i2","bdata":"ThCbEUQH9ghSCC8IpBL8D04KYQy6Bb4IMgWyCT8MXBFLEE8PfxJqBH0KHBHpBj8N0wmFEQ0PaQ2nCKMH"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"mode":"lines+markers","name":"Google Ads","x":["2026-01-01T00:00:00.000000","2026-01-02T00:00:00.000000","2026-01-03T00:00:00.000000","2026-01-04T00:00:00.000000","2026-01-05T00:00:00.000000","2026-01-06T00:00:00.000000","2026-01-07T00:00:00.000000","2026-01-08T00:00:00.000000","2026-01-09T00:00:00.000000","2026-01-10T00:00:00.000000","2026-01-11T00:00:00.000000","2026-01-12T00:00:00.000000","2026-01-13T00:00:00.000000","2026-01-14T00:00:00.000000","2026-01-15T00:00:00.000000","2026-01-16T00:00:00.000000","2026-01-17T00:00:00.000000","2026-01-18T00:00:00.000000","2026-01-19T00:00:00.000000","2026-01-20T00:00:00.000000","2026-01-21T00:00:00.000000","2026-01-22T00:00:00.000000","2026-01-23T00:00:00.000000","2026-01-24T00:00:00.000000","2026-01-25T00:00:00.000000","2026-01-26T00:00:00.000000","2026-01-27T00:00:00.000000","2026-01-28T00:00:00.000000","2026-01-29T00:00:00.000000","2026-01-30T00:00:00.000000"],"y":{"dtype":"i2","bdata":"LQdKCRAKdRVXB8gH6g0IFRwG5A\u002fHDWMQswtjB1YXxRPCDvcRpAb8EXIPGRQACYcQsRD+C14Q3BTgCdIH"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"mode":"lines+markers","name":"LinkedIn Ads","x":["2026-01-01T00:00:00.000000","2026-01-02T00:00:00.000000","2026-01-03T00:00:00.000000","2026-01-04T00:00:00.000000","2026-01-05T00:00:00.000000","2026-01-06T00:00:00.000000","2026-01-07T00:00:00.000000","2026-01-08T00:00:00.000000","2026-01-09T00:00:00.000000","2026-01-10T00:00:00.000000","2026-01-11T00:00:00.000000","2026-01-12T00:00:00.000000","2026-01-13T00:00:00.000000","2026-01-14T00:00:00.000000","2026-01-15T00:00:00.000000","2026-01-16T00:00:00.000000","2026-01-17T00:00:00.000000","2026-01-18T00:00:00.000000","2026-01-19T00:00:00.000000","2026-01-20T00:00:00.000000","2026-01-21T00:00:00.000000","2026-01-22T00:00:00.000000","2026-01-23T00:00:00.000000","2026-01-24T00:00:00.000000","2026-01-25T00:00:00.000000","2026-01-26T00:00:00.000000","2026-01-27T00:00:00.000000","2026-01-28T00:00:00.000000","2026-01-29T00:00:00.000000","2026-01-30T00:00:00.000000"],"y":{"dtype":"i2","bdata":"XQQAEAkIywW3Be4KlRB\u002fCfcICBCQB10KEAnZDFMFKwgdEaEQohCQD4QJkBHXDnAP2gWQCyEDoQX7C1UJ"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"labels":["Google Ads","LinkedIn Ads","Meta Ads"],"name":"Conversions","values":{"dtype":"i2","bdata":"IRGcDKIL"},"type":"pie","domain":{"x":[0.0,0.45],"y":[0.3888888888888889,0.6111111111111112]}},{"name":"ROAS","x":["Google Ads","LinkedIn Ads","Meta Ads"],"y":{"dtype":"f8","bdata":"VZx9+Aw7EECdNtBpA50MQAIrhxbZzgpA"},"type":"bar","xaxis":"x3","yaxis":"y3"},{"name":"CPA","x":["Google Ads","LinkedIn Ads","Meta Ads"],"y":{"dtype":"f8","bdata":"QacNdNpgP0BxPQrXo7BIQNHbslbHZEhA"},"type":"bar","xaxis":"x4","yaxis":"y4"},{"x":[100000,25000,7000,1800],"y":["Impressions","Clicks","Leads","Conversions"],"type":"funnel","xaxis":"x5","yaxis":"y5"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.45]},"yaxis":{"anchor":"x","domain":[0.7777777777777778,1.0]},"xaxis2":{"anchor":"y2","domain":[0.55,1.0]},"yaxis2":{"anchor":"x2","domain":[0.7777777777777778,1.0]},"xaxis3":{"anchor":"y3","domain":[0.55,1.0]},"yaxis3":{"anchor":"x3","domain":[0.3888888888888889,0.6111111111111112]},"xaxis4":{"anchor":"y4","domain":[0.0,0.45]},"yaxis4":{"anchor":"x4","domain":[0.0,0.22222222222222224]},"xaxis5":{"anchor":"y5","domain":[0.55,1.0]},"yaxis5":{"anchor":"x5","domain":[0.0,0.22222222222222224]},"annotations":[{"font":{"size":16},"showarrow":false,"text":"Revenue by Platform","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Ad Spend Trend","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Conversion Performance","x":0.225,"xanchor":"center","xref":"paper","y":0.6111111111111112,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"ROAS Comparison","x":0.775,"xanchor":"center","xref":"paper","y":0.6111111111111112,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"CPA Analysis","x":0.225,"xanchor":"center","xref":"paper","y":0.22222222222222224,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Marketing Funnel Overview","x":0.775,"xanchor":"center","xref":"paper","y":0.22222222222222224,"yanchor":"bottom","yref":"paper"}],"title":{"text":"AI-Powered Unified Marketing Intelligence Dashboard","x":0.5,"xanchor":"center"},"height":1400,"width":1600,"showlegend":true},                        {"responsive": true}                    )                };            </script>        </div>
-    </div>
+    <!-- Visual Generation Engine Scripts Integration -->
+    <script>
+        // Extract multi-dimensional dataset array passed securely from Jinja runtime engine
+        const rawPool = {{ data | tojson if data else '[]' }};
 
+        // --- 1. RENDER PLOTLY PERFORMANCE HEATMAP MATRIX ---
+        const matrixX = rawPool.map(item => item.timestamp ? item.timestamp.split(' ')[1] : '00:00');
+        const matrixY = ['Conversion %', 'Prompt Cost ($)', 'Completion Cost ($)'];
+        const zValues = [
+            rawPool.map(item => item.conversion_rate || 0),
+            rawPool.map(item => item.prompt_cost || 0),
+            rawPool.map(item => item.completion_cost || 0)
+        ];
+
+        const heatmapLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: {t:10, b:40, l:90, r:10}, font: {color: '#94a3b8', size: 10},
+            xaxis: {gridcolor: 'rgba(255,255,255,0.05)'}, yaxis: {gridcolor: 'rgba(255,255,255,0.05)'}
+        };
+        Plotly.newPlot('plotlyHeatmap', [{
+            z: zValues, x: matrixX, y: matrixY, type: 'heatmap', colorscale: 'Viridis'
+        }], heatmapLayout, {responsive: true, displayModeBar: false});
+
+        // --- 2. RENDER PLOTLY GEOGRAPHICAL FOOTPRINT DISPERSION MAP ---
+        const lats = rawPool.map(item => item.region_lat || 37.0902);
+        const lons = rawPool.map(item => item.region_lon || -95.7129);
+        const markerSizes = rawPool.map(item => (item.conversion_rate || 1) * 4);
+
+        const geoLayout = {
+            geo: {
+                scope: 'usa', projection: {type: 'albers usa'},
+                showland: true, landcolor: '#0f172a', subunitcolor: '#334155', countrycolor: '#1e293b',
+                bgcolor: 'rgba(0,0,0,0)'
+            },
+            margin: {t:0, b:0, l:0, r:0}, paper_bgcolor: 'rgba(0,0,0,0)'
+        };
+        Plotly.newPlot('plotlyGeoMap', [{
+            type: 'scattergeo', lat: lats, lon: lons, mode: 'markers',
+            marker: {size: markerSizes, color: 'rgb(129, 140, 248)', opacity: 0.8, line: {width: 1, color: '#ffffff'}}
+        }], geoLayout, {responsive: true, displayModeBar: false});
+
+        // --- 3. DATA INGESTION STREAM HANDLERS ---
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => uploadDataPayload(e.target.files[0]);
+
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('border-indigo-400');
+        dropZone.ondrop = (e) => { e.preventDefault(); uploadDataPayload(e.dataTransfer.files[0]); };
+
+        async function uploadDataPayload(file) {
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            dropZone.innerText = "Transforming data matrix elements... Syncing pipelines...";
+            const response = await fetch('/upload-telemetry', { method: 'POST', body: formData });
+            if (response.ok) {
+                alert("Data Lake Transformed Successfully! Reloading dashboard layers...");
+                window.location.reload();
+            } else {
+                alert("Parsing fault detected in uploaded structural schema columns.");
+                window.location.reload();
+            }
+        }
+    </script>
 </body>
 </html>
