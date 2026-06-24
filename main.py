@@ -67,11 +67,11 @@ def calculate_executive_summary(df):
     }
 
 @app.route("/")
-def index():
+def dashboard():
     global CURRENT_DATAFRAME
     summary = calculate_executive_summary(CURRENT_DATAFRAME)
     data_records = CURRENT_DATAFRAME.to_dict(orient="records")
-    return render_template("index.html", summary=summary, data=data_records)
+    return render_template("dashboard.html", summary=summary, data=data_records)
 
 @app.route("/ingest", methods=["POST"])
 def ingest_telemetry():
@@ -116,6 +116,9 @@ def export_ledger():
         headers={"Content-disposition": "attachment; filename=marketing_telemetry_ledger.csv"}
     )
 
+import os
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
-    
+    # Keep the environment variable for Render, but change the local default to 8080
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
