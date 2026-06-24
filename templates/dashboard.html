@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Marketing Intelligence Enterprise Suite</title>
-    <script src="https://plot.ly"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #090d16, #111827, #0f172a);
@@ -32,7 +32,7 @@
             border: 2px dashed rgba(255,255,255,0.1); border-radius: 10px; padding: 30px;
             text-align: center; cursor: pointer; color: #a5b4fc; transition: 0.2s;
         }
-        .dropzone:hover { border-color: #6366f1; background: rgba(99,102,241,0.02); }
+        .dropzone.dragover { border-color: #34d399; background: rgba(52,211,153,0.05); }
     </style>
 </head>
 <body>
@@ -46,72 +46,47 @@
     </header>
 
     <main>
-        <!-- Ingestion Migration Node -->
         <section class="card">
             <h4 style="margin:0 0 8px 0; font-size:14px;">Automated Telemetry Migration Slot</h4>
             <div id="dropZone" class="dropzone">
-                <p style="margin:0; font-size:13px;">Drag & Drop continuous performance campaign logs spreadsheet (.csv) here to recompile visuals</p>
+                <p id="dropZoneText" style="margin:0; font-size:13px;">Drag & Drop continuous performance campaign logs spreadsheet (.csv) here to recompile visuals</p>
                 <input type="file" id="fileInput" accept=".csv" style="display:none;">
             </div>
         </section>
 
-        <!-- KPI Executive Metrics Row -->
         <section class="kpi-grid">
-            <div class="card">
-                <p class="kpi-lbl">Total Campaign Spend</p>
-                <div class="kpi-val" style="color:#f43f5e;">${{ summary.total_spend }}</div>
-            </div>
-            <div class="card">
-                <p class="kpi-lbl">Generated Revenue Pipeline</p>
-                <div class="kpi-val" style="color:#10b981;">${{ summary.total_revenue }}</div>
-            </div>
-            <div class="card">
-                <p class="kpi-lbl">Blended ROAS Scale</p>
-                <div class="kpi-val" style="color:#6366f1;">{{ summary.blended_roas }}x</div>
-            </div>
-            <div class="card">
-                <p class="kpi-lbl">Blended CPA Metric</p>
-                <div class="kpi-val" style="color:#f59e0b;">${{ summary.blended_cpa }}</div>
-            </div>
-            <div class="card">
-                <p class="kpi-lbl">AI Gateway Cost Overheads</p>
-                <div class="kpi-val" style="font-size:22px; margin-top:14px;">${{ summary.total_infra_cost }}</div>
-            </div>
+            <div class="card"><p class="kpi-lbl">Total Campaign Spend</p><div id="kpi-spend" class="kpi-val" style="color:#f43f5e;">${{ summary.total_spend }}</div></div>
+            <div class="card"><p class="kpi-lbl">Generated Revenue Pipeline</p><div id="kpi-revenue" class="kpi-val" style="color:#10b981;">${{ summary.total_revenue }}</div></div>
+            <div class="card"><p class="kpi-lbl">Blended ROAS Scale</p><div id="kpi-roas" class="kpi-val" style="color:#6366f1;">{{ summary.blended_roas }}x</div></div>
+            <div class="card"><p class="kpi-lbl">Blended CPA Metric</p><div id="kpi-cpa" class="kpi-val" style="color:#f59e0b;">${{ summary.blended_cpa }}</div></div>
+            <div class="card"><p class="kpi-lbl">AI Gateway Cost Overheads</p><div id="kpi-infra" class="kpi-val" style="font-size:22px; margin-top:14px;">${{ summary.total_infra_cost }}</div></div>
         </section>
 
-        <!-- Charts Dashboard Matrix Grid -->
         <section class="chart-grid">
-            <!-- 1 & 4. Revenue By Platform & ROAS Comparison -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#c084fc;">1 & 4. Revenue Generation vs ROAS Allocation by Platform</h4>
                 <div id="plotPlatformRevenue" class="chart-box"></div>
             </div>
-            <!-- 2. Ad Spend Trend over Time -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#38bdf8;">2. Continuous Media Ad Spend Trend Streams</h4>
                 <div id="plotAdSpendTrend" class="chart-box"></div>
             </div>
-            <!-- 3 & 5. Conversion Performance vs CPA Analysis -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#34d399;">3 & 5. Conversion Acquisition Performance vs CPA Allocation</h4>
                 <div id="plotConversionCPA" class="chart-box"></div>
             </div>
-            <!-- 6. Marketing Funnel Stage Overview -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#fb7185;">6. Structural Marketing Conversion Funnel Drops Overview</h4>
                 <div id="plotFunnelStage" class="chart-box"></div>
             </div>
-            <!-- 7. User Sentiment Profile Analysis -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#fbcfe8;">7. Ingested Intent User Sentiment Profiles Analysis</h4>
                 <div id="plotUserSentiment" class="chart-box"></div>
             </div>
-            <!-- 8. Intent Topic Distribution Breakdown -->
             <div class="card">
                 <h4 style="margin:0; font-size:13px; color:#fde047;">8. Conversational Intent Classification Topic Distribution</h4>
                 <div id="plotIntentTopics" class="chart-box"></div>
             </div>
-            <!-- 9. Financial Cost Breakdown by Intent -->
             <div class="card" style="grid-column: span 2;">
                 <h4 style="margin:0; font-size:13px; color:#818cf8;">9. Infrastructure Pipeline Cost Overhead Breakdown by Conversational Intent</h4>
                 <div id="plotIntentCosts" class="chart-box" style="height:380px;"></div>
@@ -122,63 +97,138 @@
     <div id="payload" data-records='{{ data | tojson | safe }}' style="display:none;"></div>
 
     <script>
-        const rawData = JSON.parse(document.getElementById('payload').getAttribute('data-records') || '[]');
-        
-        // Data Aggregation Helper Functions
-        const groupbySum = (arr, key, targetKey) => {
-            return Object.values(arr.reduce((acc, obj) => {
-                acc[obj[key]] = acc[obj[key]] || { [key]: obj[key], [targetKey]: 0, count: 0 };
-                acc[obj[key]][targetKey] += obj[targetKey];
-                acc[obj[key]].count++;
-                return acc;
-            }, {}));
-        };
-
         const globalChartTheme = {
             paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#94a3b8', size: 10 }, margin: { t: 30, b: 40, l: 50, r: 30 },
-            xaxis: { gridcolor: 'rgba(255,255,255,0.03)', zeroline: false },
-            yaxis: { gridcolor: 'rgba(255,255,255,0.03)', zeroline: false }
+            font: { color: '#94a3b8', size: 10 }, margin: { t: 40, b: 40, l: 50, r: 50 },
+            xaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false }
         };
 
-        // 1 & 4: Revenue & ROAS by Platform Group
-        const platformData = groupbySum(rawData, 'platform', 'revenue_generated');
-        const platforms = platformData.map(d => d.platform);
-        const revenues = platformData.map(d => d.revenue_generated);
-        const avgRoas = platforms.map(p => {
-            const matches = rawData.filter(d => d.platform === p);
-            return matches.reduce((acc, curr) => acc + curr.roas, 0) / matches.length;
+        function renderDashboard(rawData) {
+            if (!rawData || rawData.length === 0) return;
+
+            // Aggregator Utility
+            const getGroupedData = (arr, groupKey, sumKey, isAvg = false) => {
+                const map = {};
+                arr.forEach(d => {
+                    const val = d[groupKey] || 'Unknown';
+                    if (!map[val]) map[val] = { sum: 0, count: 0 };
+                    map[val].sum += parseFloat(d[sumKey] || 0);
+                    map[val].count++;
+                });
+                return Object.keys(map).map(k => ({
+                    key: k,
+                    value: isAvg ? (map[k].sum / map[k].count) : map[k].sum
+                }));
+            };
+
+            // Chart 1 & 4: Multi-Axis Bar + Line Chart
+            const revData = getGroupedData(rawData, 'platform', 'revenue_generated');
+            const roasData = getGroupedData(rawData, 'platform', 'roas', true);
+            Plotly.newPlot('plotPlatformRevenue', [
+                { x: revData.map(d=>d.key), y: revData.map(d=>d.value), type: 'bar', name: 'Revenue ($)', marker: { color: '#a855f7' } },
+                { x: roasData.map(d=>d.key), y: roasData.map(d=>d.value), type: 'scatter', mode:'lines+markers', yaxis: 'y2', name: 'Avg ROAS (x)', line: { color: '#6366f1' } }
+            ], { ...globalChartTheme, yaxis2: { overlaying: 'y', side: 'right', showgrid: false } }, { displayModeBar: false });
+
+            // Chart 2: Ad Spend Trend Streams
+            const sortedLogs = [...rawData].sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+            Plotly.newPlot('plotAdSpendTrend', [{
+                x: sortedLogs.map(d => d.timestamp), y: sortedLogs.map(d => d.ad_spend),
+                type: 'scatter', mode: 'lines', line: { color: '#0ea5e9', shape: 'spline' },
+                fill: 'tozeroy', fillcolor: 'rgba(14,165,233,0.05)'
+            }], globalChartTheme, { displayModeBar: false });
+
+            // Chart 3 & 5: Conversions vs CPA
+            const convData = getGroupedData(rawData, 'platform', 'conversions');
+            const cpaData = getGroupedData(rawData, 'platform', 'cpa', true);
+            Plotly.newPlot('plotConversionCPA', [
+                { x: convData.map(d=>d.key), y: convData.map(d=>d.value), type: 'bar', name: 'Conversions', marker: { color: '#10b981' } },
+                { x: cpaData.map(d=>d.key), y: cpaData.map(d=>d.value), type: 'scatter', mode: 'markers+lines', yaxis: 'y2', name: 'Mean CPA ($)', line: { color: '#f59e0b' } }
+            ], { ...globalChartTheme, yaxis2: { overlaying: 'y', side: 'right', showgrid: false } }, { displayModeBar: false });
+
+            // Chart 6: Conversion Funnel Allocation
+            const funnelOrder = ["Impression", "Click-Through", "Lead Generation", "Cart Addition", "Conversion Checkout"];
+            const funnelCounts = funnelOrder.map(stage => ({
+                stage: stage,
+                count: rawData.filter(d => d.funnel_stage === stage).length
+            }));
+            Plotly.newPlot('plotFunnelStage', [{
+                type: 'funnel',
+                y: funnelCounts.map(f => f.stage), x: funnelCounts.map(f => f.count),
+                marker: { color: ['#f43f5e', '#ec4899', '#d946ef', '#a855f7', '#6366f1'] }
+            }], globalChartTheme, { displayModeBar: false });
+
+            // Chart 7: Ingested Intent User Sentiment Profiles
+            const sentimentData = getGroupedData(rawData, 'sentiment', 'conversions');
+            Plotly.newPlot('plotUserSentiment', [{
+                values: sentimentData.map(d=>d.value), labels: sentimentData.map(d=>d.key),
+                type: 'pie', hole: 0.4, marker: { colors: ['#fb7185', '#38bdf8', '#34d399', '#fbbf24'] }
+            }], globalChartTheme, { displayModeBar: false });
+
+            // Chart 8: Intent Classification Topic Distribution
+            const topicData = getGroupedData(rawData, 'intent_topic', 'ad_spend');
+            Plotly.newPlot('plotIntentTopics', [{
+                x: topicData.map(d=>d.value), y: topicData.map(d=>d.key),
+                type: 'bar', orientation: 'h', marker: { color: '#fde047' }
+            }], globalChartTheme, { displayModeBar: false });
+
+            // Chart 9: Cost Overhead Breakdown by Conversational Intent
+            const infraData = getGroupedData(rawData, 'intent_topic', 'total_infra_cost');
+            Plotly.newPlot('plotIntentCosts', [{
+                x: infraData.map(d=>d.key), y: infraData.map(d=>d.value),
+                type: 'bar', marker: { color: '#818cf8' }
+            }], globalChartTheme, { displayModeBar: false });
+        }
+
+        // Initialize App
+        const initialRecords = JSON.parse(document.getElementById('payload').getAttribute('data-records') || '[]');
+        renderDashboard(initialRecords);
+
+        // --- DRAG & DROP INGESTION ASYNC CONTROLLER ---
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const dropZoneText = document.getElementById('dropZoneText');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if(e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length) handleUpload(e.target.files[0]);
         });
 
-        Plotly.newPlot('plotPlatformRevenue', [
-            { x: platforms, y: revenues, type: 'bar', name: 'Revenue ($)', marker: { color: '#a855f7' } },
-            { x: platforms, y: avgRoas, type: 'scatter', yaxis: 'y2', name: 'Avg ROAS (x)', marker: { color: '#6366f1' } }
-        ], {
-            ...globalChartTheme,
-            yaxis2: { overlaying: 'y', side: 'right', gridcolor: 'rgba(0,0,0,0)', font: { color: '#6366f1' } }
-        }, { displayModeBar: false });
+        function handleUpload(file) {
+            dropZoneText.innerText = `Uploading & compiling ${file.name}...`;
+            const formData = new FormData();
+            formData.append('file', file);
 
-        // 2: Ad Spend Trend Streams
-        const sortedLogs = [...rawData].sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-        Plotly.newPlot('plotAdSpendTrend', [{
-            x: sortedLogs.map(d => d.timestamp), y: sortedLogs.map(d => d.ad_spend),
-            type: 'scatter', mode: 'lines+markers', line: { color: '#0ea5e9', shape: 'spline' },
-            fill: 'tozeroy', fillcolor: 'rgba(14,165,233,0.05)'
-        }], globalChartTheme, { displayModeBar: false });
-
-        // 3 & 5: Conversions vs CPA
-        const platformConvs = groupbySum(rawData, 'platform', 'conversions');
-        const cpaMap = platformConvs.map(p => {
-            const matches = rawData.filter(d => d.platform === p.platform);
-            return matches.reduce((acc, curr) => acc + curr.cpa, 0) / matches.length;
-        });
-
-        Plotly.newPlot('plotConversionCPA', [
-            { x: platformConvs.map(d => d.platform), y: platformConvs.map(d => d.conversions), type: 'bar', name: 'Conversions', marker: { color: '#10b981' } },
-            { x: platformConvs.map(d => d.platform), y: cpaMap, type: 'scatter', mode: 'markers+lines', yaxis: 'y2', name: 'Mean CPA ($)', marker: { color: '#f59e0b', size: 8 } }
-        ], {
-            ...globalChartTheme, yaxis2: { overlaying: 'y', side: 'right', gridcolor: 'rgba(0,0,0,0)' }
-        }, { displayModeBar: false });
-
-        // 6: Funnel Stage Volume Allocation
-        const funnelOrder = ["Impression", "Click-Through", "Lead Generation", "Cart Addition", "Conversion Checkout"];
+            fetch('/ingest', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(res => {
+                if(res.error) {
+                    alert(res.error);
+                    dropZoneText.innerText = "Error encountered. Try dropping another performance log file.";
+                } else {
+                    dropZoneText.innerText = "Telemetry compiled. Charts successfully adapted!";
+                    // Reactively update KPIs
+                    document.getElementById('kpi-spend').innerText = '$' + res.summary.total_spend;
+                    document.getElementById('kpi-revenue').innerText = '$' + res.summary.total_revenue;
+                    document.getElementById('kpi-roas').innerText = res.summary.blended_roas + 'x';
+                    document.getElementById('kpi-cpa').innerText = '$' + res.summary.blended_cpa;
+                    document.getElementById('kpi-infra').innerText = '$' + res.summary.total_infra_cost;
+                    // Remap Plotly visuals
+                    renderDashboard(res.data);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                dropZoneText.innerText = "Fatal upload failure.";
+            });
+        }
+    </script>
+</body>
+</html>

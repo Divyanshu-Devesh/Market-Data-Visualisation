@@ -1,96 +1,121 @@
-from fastapi import FastAPI, Request, UploadFile, File
-from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
-from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
-import pandas as pd
-import numpy as np
 import io
+import json
+import random
+from datetime import datetime, timedelta
+from flask import Flask, render_template, request, jsonify, Response
+import pandas as pd
 
-app = FastAPI(title="AI Marketing Intelligence Architecture System")
-templates = Jinja2Templates(directory="templates")
+app = Flask(__name__)
 
-def generate_high_fidelity_marketing_data():
-    """Generates a complete, granular data framework matching all 9 core metrics."""
-    np.random.seed(42)
-    rows = 50
+# --- GENERIC TELEMETRY LOG GENERATOR (FOR DEMO/DEFAULT RUNS) ---
+def generate_mock_telemetry_data():
+    platforms = ["Google Ads", "Meta Ads", "LinkedIn Campaign Studio", "TikTok Business", "YouTube Brand Engine"]
+    sentiments = ["Strong Positive", "Neutral/Inquisitive", "Frictional/Mixed", "Highly Motivated"]
+    topics = ["Enterprise Scalability", "Pricing / ROAS Validation", "Feature Depth Request", "Integration API Setup"]
+    stages = ["Impression", "Click-Through", "Lead Generation", "Cart Addition", "Conversion Checkout"]
     
-    platforms = ["Meta Ads", "Google Search", "TikTok Ads", "LinkedIn Campaign", "YouTube Video"]
-    intents = ["Product Pricing", "Feature Inquiry", "Competitor Comparison", "Integration Tech", "Enterprise Sales"]
-    sentiments = ["Positive", "Neutral", "Urgent Inquiry"]
-    funnel_stages = ["Impression", "Click-Through", "Lead Generation", "Cart Addition", "Conversion Checkout"]
+    records = []
+    base_time = datetime.now() - timedelta(days=30)
     
-    df = pd.DataFrame({
-        "timestamp": pd.date_range(end=pd.Timestamp.now(), periods=rows, freq="12h").strftime("%Y-%m-%d %H:%M"),
-        "platform": np.random.choice(platforms, size=rows),
-        "intent_topic": np.random.choice(intents, size=rows),
-        "sentiment": np.random.choice(sentiments, size=rows, p=[0.5, 0.3, 0.2]),
-        "funnel_stage": np.random.choice(funnel_stages, size=rows),
-        "ad_spend": np.random.uniform(200, 1500, size=rows).round(2),
-        "revenue_generated": np.random.uniform(400, 6000, size=rows).round(2),
-        "conversions": np.random.randint(5, 80, size=rows),
-        "clicks": np.random.randint(100, 2000, size=rows),
-        "llm_prompt_cost": np.random.uniform(0.01, 0.04, size=rows).round(4),
-        "llm_completion_cost": np.random.uniform(0.02, 0.09, size=rows).round(4),
-    })
-    
-    # Calculate downstream KPI fields dynamically
-    df["roas"] = (df["revenue_generated"] / df["ad_spend"]).round(2)
-    df["cpa"] = (df["ad_spend"] / df["conversions"]).round(2)
-    df["total_llm_cost"] = df["llm_prompt_cost"] + df["llm_completion_cost"]
-    return df
+    for i in range(120):
+        timestamp = (base_time + timedelta(hours=i * 6)).strftime("%Y-%m-%dT%H:%M:%S")
+        platform = random.choice(platforms)
+        spend = round(random.uniform(150, 2400), 2)
+        roas = round(random.uniform(1.2, 6.8), 2)
+        revenue = round(spend * roas, 2)
+        conversions = random.randint(5, 80)
+        cpa = round(spend / conversions, 2) if conversions > 0 else 0
+        infra_cost = round(spend * random.uniform(0.02, 0.07), 2)
+        
+        records.append({
+            "timestamp": timestamp,
+            "platform": platform,
+            "ad_spend": spend,
+            "revenue_generated": revenue,
+            "roas": roas,
+            "conversions": conversions,
+            "cpa": cpa,
+            "total_infra_cost": infra_cost,
+            "funnel_stage": random.choice(stages),
+            "sentiment": random.choice(sentiments),
+            "intent_topic": random.choice(topics)
+        })
+    return pd.DataFrame(records)
 
-CURRENT_DATA_POOL = generate_high_fidelity_marketing_data()
+# Global in-memory storage holding the operating dataframe
+CURRENT_DATAFRAME = generate_mock_telemetry_data()
 
-@app.get("/", response_class=HTMLResponse)
-async def serve_actionable_dashboard(request: Request):
-    global CURRENT_DATA_POOL
-    df = CURRENT_DATA_POOL.copy()
-    
-    # Calculate executive summary overview metrics
-    total_spend = df["ad_spend"].sum()
-    total_rev = df["revenue_generated"].sum()
-    blended_roas = round(total_rev / total_spend, 2) if total_spend > 0 else 0
-    blended_cpa = round(total_spend / df["conversions"].sum(), 2) if df["conversions"].sum() > 0 else 0
-    total_infra_cost = df["total_llm_cost"].sum()
-    
-    summary_framework = {
+def calculate_executive_summary(df):
+    """Generates structured KPI totals and weights safely parsing columns."""
+    try:
+        total_spend = round(df["ad_spend"].sum(), 2)
+        total_revenue = round(df["revenue_generated"].sum(), 2)
+        blended_roas = round(total_revenue / total_spend, 2) if total_spend > 0 else 0
+        
+        total_conversions = df["conversions"].sum()
+        blended_cpa = round(total_spend / total_conversions, 2) if total_conversions > 0 else 0
+        total_infra = round(df["total_infra_cost"].sum(), 2)
+    except Exception:
+        total_spend, total_revenue, blended_roas, blended_cpa, total_infra = 0, 0, 0, 0, 0
+
+    return {
         "total_spend": f"{total_spend:,.2f}",
-        "total_revenue": f"{total_rev:,.2f}",
-        "blended_roas": blended_roas,
-        "blended_cpa": blended_cpa,
-        "total_infra_cost": round(total_infra_cost, 4),
-        "total_records": len(df)
+        "total_revenue": f"{total_revenue:,.2f}",
+        "blended_roas": f"{blended_roas:.2f}",
+        "blended_cpa": f"{blended_cpa:.2f}",
+        "total_infra_cost": f"{total_infra:,.2f}"
     }
+
+@app.route("/")
+def index():
+    global CURRENT_DATAFRAME
+    summary = calculate_executive_summary(CURRENT_DATAFRAME)
+    data_records = CURRENT_DATAFRAME.to_dict(orient="records")
+    return render_template("index.html", summary=summary, data=data_records)
+
+@app.route("/ingest", methods=["POST"])
+def ingest_telemetry():
+    """Asynchronous pipeline parsing drag & dropped files."""
+    global CURRENT_DATAFRAME
+    if "file" not in request.files:
+        return jsonify({"error": "Missing valid file attachment form metadata."}), 400
     
-    return templates.TemplateResponse(
-        request=request,
-        name="dashboard.html",
-        context={
-            "summary": summary_framework,
-            "data": df.to_dict(orient="records")
-        }
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "Empty selection received."}), 400
+
+    if file and file.filename.endswith(".csv"):
+        try:
+            stream = io.StringIO(file.stream.read().decode("UTF-8"), newline=None)
+            df = pd.read_csv(stream)
+            
+            # Match schema or fallback to default safely
+            required_cols = ["timestamp", "platform", "ad_spend", "revenue_generated", "roas", "conversions", "cpa"]
+            for col in required_cols:
+                if col not in df.columns:
+                    return jsonify({"error": f"Missing required column structure: {col}"}), 400
+            
+            CURRENT_DATAFRAME = df
+            return jsonify({
+                "summary": calculate_executive_summary(df),
+                "data": df.to_dict(orient="records")
+            })
+        except Exception as e:
+            return jsonify({"error": f"File Parse Failure: {str(e)}"}), 500
+            
+    return jsonify({"error": "Invalid file type. Only CSV allowed."}), 400
+
+@app.route("/export/csv")
+def export_ledger():
+    """Generates an immediate runtime download action of current operations."""
+    global CURRENT_DATAFRAME
+    csv_string = CURRENT_DATAFRAME.to_csv(index=False)
+    return Response(
+        csv_string,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=marketing_telemetry_ledger.csv"}
     )
 
-@app.post("/upload-telemetry")
-async def handle_data_migration(file: UploadFile = File(...)):
-    global CURRENT_DATA_POOL
-    try:
-        contents = await file.read()
-        df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
-        CURRENT_DATA_POOL = df
-        return JSONResponse(content={"status": "Data Lake Synced", "records": len(df)})
-    except Exception as e:
-        return JSONResponse(status_code=400, content={"status": "Fault", "detail": str(e)})
-
-@app.get("/export/csv")
-async def export_warehouse_csv():
-    global CURRENT_DATA_POOL
-    stream = io.StringIO()
-    CURRENT_DATA_POOL.to_csv(stream, index=False)
-    response = StreamingResponse(io.BytesIO(stream.getvalue().encode()), media_type="text/csv")
-    response.headers["Content-Disposition"] = "attachment; filename=comprehensive_marketing_export.csv"
-    return response
-
-@app.post("/query")
-async def sandbox_query(payload: dict):
-    return JSONResponse(content={"status": "Success", "pipeline_output_extract": "AI Core operational pipeline tracking stable."})
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
+    
