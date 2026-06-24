@@ -2,7 +2,7 @@ import io
 import json
 import random
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, redirect
 import pandas as pd
 
 app = Flask(__name__)
@@ -86,8 +86,7 @@ def ingest_telemetry():
 
     if file and file.filename.endswith(".csv"):
         try:
-            stream = io.StringIO(file.stream.read().decode("UTF-8"), newline=None)
-            df = pd.read_csv(stream)
+            df = pd.read_csv(file.stream)
             
             # Match schema or fallback to default safely
             required_cols = ["timestamp", "platform", "ad_spend", "revenue_generated", "roas", "conversions", "cpa"]
